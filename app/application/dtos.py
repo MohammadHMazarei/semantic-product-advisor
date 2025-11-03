@@ -52,8 +52,14 @@ class ProductDTO(BaseModel):
         # Create preview
         preview = clean_desc[:200] + "..." if len(clean_desc) > 200 else clean_desc
 
-        # Price display (can be enhanced based on actual data)
-        price_display = "قیمت: تماس بگیرید"
+        # Price display
+        if product.price is not None:
+            if isinstance(product.price, str):
+                price_display = product.price
+            else:
+                price_display = f"{product.price:,.0f} تومان"
+        else:
+            price_display = "قیمت: تماس بگیرید"
 
         return cls(
             id=product.id,
