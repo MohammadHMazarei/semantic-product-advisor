@@ -17,3 +17,9 @@ chromadb==0.4.22
 
 # Utilities
 python-dotenv==1.0.0
+
+# LLM Integration
+ollama==0.1.6
+
+# Redis for conversation storage
+redis==5.0.1
