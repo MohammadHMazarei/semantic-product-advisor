@@ -1,5 +1,34 @@
 # docker-compose.yml
 services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   chatbot-api:
     build: .
     container_name: chatbot-api
@@ -9,6 +38,8 @@ services:
       - chroma_data:/app/chroma_db
       - ./data:/app/data
       - ./logs:/app/logs
+      - model_cache:/root/.cache/huggingface
+      - ./app:/app/app
     environment:
       - API_TITLE=Digital Marketing Chatbot API
       - API_VERSION=1.0.0
@@ -24,7 +55,25 @@ services:
       - MAX_SEARCH_TOP_K=20
       - MIN_RELEVANCE_SCORE=0.3
       - LOG_LEVEL=INFO
+      - TRANSFORMERS_CACHE=/root/.cache/huggingface
+      - SENTENCE_TRANSFORMERS_HOME=/root/.cache/huggingface
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=qwen2.5:latest
+      - OLLAMA_TIMEOUT=120
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - REDIS_PASSWORD=
+      - CONVERSATION_TTL=86400
+    depends_on:
+      ollama:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
   chroma_data:
+  model_cache:
+  ollama_data:
+  redis_data:
