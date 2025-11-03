@@ -10,7 +10,7 @@ class Product(BaseModel):
     slug: str
     permalink: str
     description: str
-    price: Optional[float] = None
+    price: str
     date_created: datetime
     status: str
 
