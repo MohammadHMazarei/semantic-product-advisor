@@ -84,7 +84,8 @@ class ChromaProductRepository(ProductRepository):
                     permalink=item['permalink'],
                     description=item.get('description', ''),
                     date_created=item['date_created'],
-                    status=item['status']
+                    status=item['status'],
+                    price=item['price']
                 )
                 products.append(product)
             except Exception as e:
