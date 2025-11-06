@@ -124,8 +124,8 @@ An interactive consultation workflow that:
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/digital-marketing-chatbot-api.git
-cd digital-marketing-chatbot-api
+git clone https://github.com/MohammadHMazarei/semantic-product-advisor.git
+cd semantic-product-advisor
 ```
 2. **Configure environment variables**
 ```bash
