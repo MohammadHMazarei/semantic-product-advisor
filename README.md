@@ -191,3 +191,130 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
   "min_relevance_score": 0.3
 }
 ```
+
+### Health Check
+#### GET ```/api/v1/products/health```: Check system health and configuration
+- Response:
+```json
+{
+  "status": "healthy",
+  "message": "The search system is ready",
+  "config": {
+    "embedding_model": "paraphrase-multilingual-mpnet-base-v2",
+    "collection_name": "products_collection",
+    "default_top_k": 5,
+    "max_top_k": 20,
+    "min_relevance_score": 0.3
+  }
+}
+```
+
+### Statistics
+#### GET ```/api/v1/products/stats```: Get indexing statistics
+- Response:
+```json
+{
+  "total_products": 150,
+  "indexed_documents": 150,
+  "status": "synced"
+}
+```
+
+
+## 🔧 Configuration
+
+Key configuration options in ```.env```:
+
+Variable | Description | Default
+--- | --- | ---
+`API_PORT` | API server port | 8000
+`EMBEDDING_MODEL_NAME` | Sentence Transformer model | paraphrase-multilingual-mpnet-base-v2
+`COLLECTION_NAME` | ChromaDB collection name | products_collection
+`DEFAULT_SEARCH_TOP_K` | Default search results | 5
+`MAX_SEARCH_TOP_K` | Maximum search results | 20
+`MIN_RELEVANCE_SCORE` | Minimum similarity threshold | 0.3
+`OLLAMA_MODEL` | LLM model for consultation | qwen2.5:latest
+`REDIS_HOST` | Logging level | INFO
+
+
+## 📊 Data Format
+
+Products should be in JSON format (```data/products.json```):
+```json
+[
+  {
+    "id": 9177,
+    "name": "مدیریت پیج اینستاگرام (اقتصادی)",
+    "slug": "instagram-page-management-economic",
+    "permalink": "https://example.com/product/...",
+    "description": "<p>توضیحات محصول...</p>",
+    "price": "1500000",
+    "date_created": "2024-01-01T00:00:00",
+    "status": "publish"
+  }
+]
+```
+
+## 🐳 Docker Services
+
+The application uses three Docker services:
+1. **chatbot-api**: Main FastAPI application
+2. **ollama**: Local LLM server for consultation features
+3. **redis**: Session and cache storage
+
+
+
+## 📝 API Documentation
+
+Once running, access interactive documentation:
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+## 🧪 Testing
+
+
+```bash
+# Run tests
+pytest
+
+# Run with coverage
+pytest --cov=app tests/
+```
+
+
+## 🔍 Logging
+
+Logs are stored in the ```logs/``` directory with configurable levels:
+
+- DEBUG: Detailed diagnostic information
+- INFO: General informational messages
+- WARNING: Warning messages
+- ERROR: Error messages
+
+
+## 🤝 Contributing
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (```git checkout -b feature/AmazingFeature```)
+3. Commit your changes (```git commit -m 'Add some AmazingFeature'```)
+4. Push to the branch (```git push origin feature/AmazingFeature```)
+5. Open a Pull Request
+
+
+## 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+
+- **Sentence Transformers** for multilingual embeddings
+- **ChromaDB** for vector storage
+- **FastAPI** for the excellent web framework
+- **LangChain** for LLM orchestration
+
+
+## 📧 Contact
+For questions or support, please open an issue on GitHub.
+
+**Made with ❤️**
